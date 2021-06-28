@@ -1,15 +1,17 @@
 import tkinter
 
+
 class counter:
     def __init__(self, window):
-        self.totalSecs = 1199 # 19:59
+        self.defSecs = 1199  # 19:59
+        self.totalSecs = self.defSecs
         self.counter = tkinter.StringVar()
-        self.counter.set("20:00")  
+        self.counter.set("20:00")
         self.running = False
 
         self.window = window
         self.window.iconbitmap("clock.ico")
-        self.window.title("Timer")
+        self.window.title("Ticker")
         self.window.attributes('-alpha', 0.85)
         self.window.geometry("300x110")
         self.window.eval('tk::PlaceWindow . center')
@@ -18,9 +20,8 @@ class counter:
         self.window.rowconfigure(0, weight=1)
         self.window.configure(bg='#2f3745')
 
-       
         self.mainframe = tkinter.Frame(
-            self.window, background='#2f3745', height=300, width=300)
+            self.window, background='#2f3745', height=300, width=110)
         self.mainframe.grid(row=0, column=0)
 
         self.start = tkinter.Button(self.mainframe,
@@ -58,13 +59,15 @@ class counter:
         self.num.grid(row=0, column=2)
 
     def countdown(self):
-        if self.totalSecs > 0 and self.running == True: 
+        if self.totalSecs > 0 and self.running == True:
             minutes = int((self.totalSecs/60) % 60)
             seconds = int((self.totalSecs) % 60)
-            self.totalSecs-=1
+            self.totalSecs -= 1
             self.counter.set(f"{minutes:02}:{seconds:02}")
             self.window.after(1000, lambda: self.countdown())
         else:
+            if self.totalSecs <= 0:
+                self.Break()
             self.Reset()
 
     def Start(self):
@@ -76,9 +79,32 @@ class counter:
     def Reset(self):
         self.running = False
         self.counter.set("20:00")
-        self.totalSecs = 1199
+        self.totalSecs = self.defSecs
         self.start['state'] = 'normal'
         self.reset['state'] = 'disabled'
+
+    def Break(self):
+        self.window.withdraw()
+        breakWin = tkinter.Toplevel(self.window)
+        breakWin.iconbitmap("clock.ico")
+        breakWin.title("Break Time")
+        breakWin.geometry("600x220")
+        breakWin.attributes('-alpha', 0.95)
+        breakWin.resizable(False, False)
+        breakWin.attributes('-fullscreen', 1)
+
+        fm = tkinter.Frame(breakWin, bg="gray13")
+        fm.pack(fill=tkinter.BOTH, expand=tkinter.YES)
+
+        brTxt = tkinter.Label(fm, text="Time for a break", font=(
+            "Arial", 25), fg="white", bg="gray13")
+        brTxt.pack(side=tkinter.TOP, expand=tkinter.YES)
+
+        exitBtn = tkinter.Button(fm, width=10, text='Exit now', borderwidth=0.01, font=('Arial 12 underline'),
+                                 command=breakWin.destroy, activebackground='gray13',
+                                 activeforeground='white', bg="gray13", fg='white', relief=tkinter.FLAT)
+        exitBtn.pack(side=tkinter.TOP, expand=tkinter.YES)
+        exitBtn.bind("<Destroy>", lambda x: self.window.deiconify())
 
 
 def main():
