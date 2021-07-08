@@ -1,5 +1,7 @@
 # Ticker
 
-Ticker is a very simple and minimalistic timer app that helps you take a break every period of time, think of it as an excuse for me to learn tkinter!
+Ticker is a simple minimalistic timer app that helps you take a break every period of time.
 
-##### app is still work in progress
+### The dist folder contains the executable and the ico needed by the app to function.
+### Source code is available in Ticker.py
+#### note: right click to choose a new time period
