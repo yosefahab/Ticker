@@ -153,6 +153,7 @@ class counter:
                             activeforeground='white', bg="gray13", fg='white', relief=tk.FLAT)
         exitBtn.pack(side=tk.TOP, expand=1)
         exitBtn.bind("<Destroy>", lambda x: self.window.deiconify())
+        self.breakWin.attributes("-topmost", True)
         self.updateProg()
 
 
