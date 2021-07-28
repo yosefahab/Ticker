@@ -31,6 +31,9 @@ class counter:
                             bd=5, relief="flat",
                             activebackground='#313b47', activeforeground='white',
                             tearoff=0)
+        self.loop = tk.BooleanVar()
+        self.menu.add_checkbutton(label="Loop", onvalue=1, offvalue=0, variable=self.loop)
+        self.menu.add_separator()
         self.timeMenu = tk.Menu(self.menu, tearoff=0, bg="#2f3745", fg='white',
                                 bd=0, relief="flat",
                                 activebackground='#313b47', activeforeground='white', selectcolor='white')
@@ -42,13 +45,13 @@ class counter:
         self.menu.add_command(
             label="\tClose\t", command=lambda: self.window.destroy())
 
-        self.start = tk.Button(self.mainframe, text='Start',
+        self.startBtn = tk.Button(self.mainframe, text='Start',
                                width=8, borderwidth=0.01,
                                font=18,
                                bg="#2f3745", fg='white',
                                activebackground='#313b47', activeforeground='white',
                                command=self.Start)
-        self.reset = tk.Button(self.mainframe,
+        self.resetBtn = tk.Button(self.mainframe,
                                text='Reset',
                                width=8, borderwidth=0.01,
                                font=18,
@@ -56,8 +59,8 @@ class counter:
                                activebackground='#313b47', activeforeground='white',
                                state='disabled',
                                command=self.Reset)
-        self.start.grid(row=3, column=1)
-        self.reset.grid(row=3, column=3)
+        self.startBtn.grid(row=3, column=1)
+        self.resetBtn.grid(row=3, column=3)
 
         self.num = tk.Label(self.mainframe,
                             textvariable=self.counter,
@@ -96,15 +99,15 @@ class counter:
 
     def Start(self):
         self.running = True
-        self.start['state'] = 'disabled'
-        self.reset['state'] = 'normal'
+        self.startBtn['state'] = 'disabled'
+        self.resetBtn['state'] = 'normal'
         self.countdown()
 
     def Reset(self):
         self.running = False
         self.selection()
-        self.start['state'] = 'normal'
-        self.reset['state'] = 'disabled'
+        self.startBtn['state'] = 'normal'
+        self.resetBtn['state'] = 'disabled'
 
     def updateProg(self):
         self.pBar['value'] += 1
@@ -112,6 +115,8 @@ class counter:
             self.breakWin.after(1000, self.updateProg)
         else:
             self.breakWin.destroy()
+            if self.loop.get() == True:
+                self.Start()
 
     def Break(self):
         self.window.withdraw()
